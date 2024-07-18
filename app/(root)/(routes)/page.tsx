@@ -15,9 +15,7 @@ const SetUpPage = () => {
   } , [onOpen , isOpen]);
 
   return (
-    <div className=" p-14">
-root
-    </div>
+    null
   );
 }
 
