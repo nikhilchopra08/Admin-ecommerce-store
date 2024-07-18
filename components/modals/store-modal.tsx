@@ -1,12 +1,12 @@
 "use client"
 
-import { useStoreModal } from "@/hooks/use-store-modal"
-import { Model } from "../model"
+import { useStoreModal } from "@/hooks/use-store-modal";
+import { Model } from "../model";
 
-export const storeModal = () => {
+export const StoreModal = () => {
     const storeModal = useStoreModal();
 
-    return(
+    return (
         <Model
             title="Create Store"
             description="Add new Store"
@@ -16,4 +16,4 @@ export const storeModal = () => {
             Add new store form
         </Model>
     );
-}
+};
