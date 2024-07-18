@@ -10,7 +10,7 @@ interface ModalProps {
     children?: React.ReactNode;
 };
 
-export const Model : React.FC<ModalProps> = ({
+export const Modal : React.FC<ModalProps> = ({
     title,
     description,
     isOpen,
