@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prismadb from "@/lib/prismadb";
 
-export async function POST(req: Request) {
+export async function POST(
+    req: Request,
+) {
     try {
         const { userId } = auth();
         const body = await req.json();
@@ -14,20 +16,20 @@ export async function POST(req: Request) {
         }
 
         if (!name) {
-            return new NextResponse("Name is required", { status: 400 });
+            return new NextResponse("Name is required", { status: 400});
         }
 
-        // Assuming prismadb is correctly configured and supports .store.create
         const store = await prismadb.store.create({
-            data: {
+            data : {
                 name,
                 userId,
-            },
-        });
+            }
+        })
 
         return NextResponse.json(store);
+
     } catch (err) {
-        console.error(`[STORES_POST] ${err}`);
-        return new NextResponse(`Internal error`, { status: 500 });
+        console.log(`[STORES_POST] ${err}`);
+        return new NextResponse(`Internal error`, { status: 500})
     }
 }
