@@ -92,11 +92,11 @@ export const BillboardForm: React.FC<SettingsFromProps> = ({ initialData }) => {
             />
             <div className="flex items-center justify-between">
                 <Heading title={title} description={description} />
-                {initialData && (
+                {/* {initialData && (
                     <Button variant="destructive" size="sm" onClick={() => setOpen(true)} disabled={loading}>
                         <Trash className="w-4 h-4" />
                     </Button>
-                )}
+                )} */}
             </div>
             <Separator />
             <Form {...form}>
