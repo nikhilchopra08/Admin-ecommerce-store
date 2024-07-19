@@ -58,6 +58,16 @@ export async function DELETE(
             return new NextResponse("storeId is required", { status: 400});
         }
 
+        const stores = await prismadb.store.findMany({
+            where: {
+                userId,
+            },
+        });
+
+        if (stores.length === 1) {
+            console.log('User has only one store');
+        }
+
         const store = await prismadb.store.deleteMany({
             where:{
                 id : params.storeId,

@@ -1,5 +1,6 @@
 "use client"
 
+import { AlertModal } from "@/components/modals/alert-modal";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Heading } from "@/components/ui/heading";
@@ -43,10 +44,9 @@ export const SettingsForm : React.FC<SettingsFormProps> = ({
         console.log(data)
         try{
             setLoading(true);
-            await axios.delete(`/api/stores/${params.storeId}`)
+            await axios.patch(`/api/stores/${params.storeId}`, data)
+            toast.success("Store updated.")
             router.refresh();
-            router.push("/")
-            toast.success("Store deleted.")
         }
         catch(e){
             toast.error("something went wrong");
@@ -55,13 +55,37 @@ export const SettingsForm : React.FC<SettingsFormProps> = ({
             setLoading(false);
         }
     }
+
+    const onDelete = async (data : SettingsFormValues) => {
+        console.log(data)
+        try{
+            setLoading(true);
+            await axios.delete(`/api/stores/${params.storeId}`, data)
+            router.refresh();
+            router.push("/")
+            toast.success("Store deleted.")
+        }
+        catch(e){
+            toast.error("Make sure you removed all products and categories first.");
+        }
+        finally{
+            setLoading(false)
+            setOpen(false);
+        }
+    }
     return(
         <>
+            <AlertModal
+            isOpen={open}
+            onClose={() => setOpen(false)}
+            onConfirm={onDelete}
+            loading={loading}
+            />
             <div className="flex items-center justify-between">
                     <Heading title="Settings" description="Manage Store preferences" />
-                    <Button disabled={loading} variant="destructive" size="sm" onClick={() => {}} >
-                        <Trash className="size-4 "/>
-                    </Button>
+                    <Button variant="destructive" size="sm" onClick={() => setOpen(true)} disabled={loading}>
+                    <Trash className="w-4 h-4" />
+                </Button>
             </div>
 
             <Separator/>
