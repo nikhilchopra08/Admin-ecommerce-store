@@ -24,7 +24,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
     const onCopy = (id: string) => {
         navigator.clipboard.writeText(id);
-        toast.success('category Id copied to the clipboard.')
+        toast.success('Category Id copied to the clipboard.')
     }
 
     const onDelete = async () => {
@@ -32,9 +32,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             setLoading(true);
             await axios.delete(`/api/${params.storeId}/categories/${data.id}`)
             router.refresh();
-            toast.success("category deleted successfully.")
+            toast.success("Category deleted successfully.")
         } catch {
-            toast.error('Error deleting');
+            toast.error('Make sure you removed all products using this category first.');
         } finally {
             setLoading(false);
             setOpen(false);

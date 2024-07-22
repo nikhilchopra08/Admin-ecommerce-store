@@ -17,8 +17,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-interface CategoryFormProps {
-    initialData: Category | null; 
+interface SettingsFromProps {
+    initialData: Category | null;
     billboards: Billboard[];
 }
 
@@ -29,7 +29,7 @@ const formSchema = z.object({
 
 type CategoryFormValues = z.infer<typeof formSchema>;
 
-export const CategoryForm: React.FC<CategoryFormProps> = ({ initialData , billboards}) => {
+export const CategoryForm: React.FC<SettingsFromProps> = ({ initialData, billboards }) => {
 
     const params = useParams();
     const router = useRouter();
@@ -93,11 +93,11 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ initialData , billbo
             />
             <div className="flex items-center justify-between">
                 <Heading title={title} description={description} />
-                {/* {initialData && (
+                {initialData && (
                     <Button variant="destructive" size="sm" onClick={() => setOpen(true)} disabled={loading}>
                         <Trash className="w-4 h-4" />
                     </Button>
-                )} */}
+                )}
             </div>
             <Separator />
             <Form {...form}>
@@ -108,7 +108,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ initialData , billbo
                             name="name"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Label</FormLabel>
+                                    <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input disabled={loading} placeholder='Category name' {...field} />
                                     </FormControl>
