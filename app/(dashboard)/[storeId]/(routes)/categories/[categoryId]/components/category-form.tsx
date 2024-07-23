@@ -61,6 +61,7 @@ export const CategoryForm: React.FC<SettingsFromProps> = ({ initialData, billboa
             router.refresh();
             router.push(`/${params.storeId}/categories`);
             toast.success(toastMessage)
+            router.refresh();
         } catch(err) {
             toast.error("Something went wrong.");
         } finally {
