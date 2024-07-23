@@ -3,9 +3,7 @@ import { BillboardForm } from "./components/billboard-form";
 
 const BillboardPage = async ({ params }: { params: { billboardId: string } }) => {
     const billboard = await prismadb.billboard.findUnique({ 
-        where: {
-            id: params.billboardId
-        }
+        where: { id: params.billboardId }
     });
 
     return (
@@ -14,7 +12,7 @@ const BillboardPage = async ({ params }: { params: { billboardId: string } }) =>
                 <BillboardForm initialData={billboard} />
             </div>
         </div>
-    )
+    );
 }
 
 export default BillboardPage;

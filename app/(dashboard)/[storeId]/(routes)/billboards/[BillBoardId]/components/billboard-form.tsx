@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from 'react'
-import * as z from 'zod'
+import { useState } from 'react';
+import * as z from 'zod';
 import { Billboard } from "@prisma/client";
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
@@ -17,29 +17,27 @@ import { useParams, useRouter } from 'next/navigation';
 import { AlertModal } from '@/components/modals/alert-modal';
 import ImageUpload from '@/components/ui/image-upload';
 
-interface SettingsFromProps {
+interface SettingsFormProps {
     initialData: Billboard | null; 
 }
 
 const formSchema = z.object({
-    label: z.string().min(1),
-    imageUrl: z.string().min(1),
-})
+    label: z.string().min(1, "Label is required"),
+    imageUrl: z.string().min(1, "Image URL is required"),
+});
 
 type BillboardFormValues = z.infer<typeof formSchema>;
 
-export const BillboardForm: React.FC<SettingsFromProps> = ({ initialData }) => {
-
+export const BillboardForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     const params = useParams();
     const router = useRouter();
-
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const title = initialData ? 'Edit billboard' : 'Create billboard'
-    const description = initialData ? 'Edit a billboard' : 'Add a new billboard'
-    const toastMessage = initialData ? 'Billboard updated.' : 'Billboard created.'
-    const action = initialData ? 'Save changes' : 'Create'
+    const title = initialData ? 'Edit Billboard' : 'Create Billboard';
+    const description = initialData ? 'Edit an existing billboard' : 'Add a new billboard';
+    const toastMessage = initialData ? 'Billboard updated successfully.' : 'Billboard created successfully.';
+    const action = initialData ? 'Save changes' : 'Create';
 
     const form = useForm<BillboardFormValues>({
         resolver: zodResolver(formSchema),
@@ -53,50 +51,50 @@ export const BillboardForm: React.FC<SettingsFromProps> = ({ initialData }) => {
         try {
             setLoading(true);
             if (initialData) {
-                await axios.patch(`/api/${params.storeId}/billboards/${params.billboardId}`, data)
+                await axios.patch(`/api/${params.storeId}/billboards/${params.billboardId}`, data);
             } else {
-                await axios.post(`/api/${params.storeId}/billboards`, data)
+                await axios.post(`/api/${params.storeId}/billboards`, data);
             }
             router.refresh();
             router.push(`/${params.storeId}/billboards`);
-            toast.success(toastMessage)
-        } catch(err) {
+            toast.success(toastMessage);
+        } catch (err) {
             toast.error("Something went wrong.");
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     const onDelete = async () => {
         try {
             setLoading(true);
-            await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`)
+            await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`);
             router.refresh();
-            router.push(`/${params.storeId}/billboards`)
-            toast.success("Billboard deleted.")
-        } catch(err) {
+            router.push(`/${params.storeId}/billboards`);
+            toast.success("Billboard deleted successfully.");
+        } catch (err) {
             toast.error("Make sure you removed all categories using this billboard first.");
         } finally {
-            setLoading(false)
+            setLoading(false);
             setOpen(false);
         }
-    }
+    };
 
     return (
         <>
             <AlertModal
-            isOpen={open}
-            onClose={() => setOpen(false)}
-            onConfirm={onDelete}
-            loading={loading}
+                isOpen={open}
+                onClose={() => setOpen(false)}
+                onConfirm={onDelete}
+                loading={loading}
             />
             <div className="flex items-center justify-between">
                 <Heading title={title} description={description} />
-                {/* {initialData && (
+                {initialData && (
                     <Button variant="destructive" size="sm" onClick={() => setOpen(true)} disabled={loading}>
                         <Trash className="w-4 h-4" />
                     </Button>
-                )} */}
+                )}
             </div>
             <Separator />
             <Form {...form}>
@@ -104,7 +102,7 @@ export const BillboardForm: React.FC<SettingsFromProps> = ({ initialData }) => {
                     <FormField
                         control={form.control} 
                         name="imageUrl"
-                        render={({field}) => (
+                        render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Background Image</FormLabel>
                                 <FormControl>
@@ -123,7 +121,7 @@ export const BillboardForm: React.FC<SettingsFromProps> = ({ initialData }) => {
                         <FormField
                             control={form.control} 
                             name="label"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Label</FormLabel>
                                     <FormControl>
@@ -137,7 +135,6 @@ export const BillboardForm: React.FC<SettingsFromProps> = ({ initialData }) => {
                     <Button disabled={loading} className='ml-auto' type='submit'>{action}</Button>
                 </form>
             </Form>
-            {/* <Separator /> */}
         </>
-    )
-}
+    );
+};
