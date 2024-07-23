@@ -1,64 +1,93 @@
-"use client"
+"use client";
 
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation"
+import { useParams, usePathname } from "next/navigation";
+import { FaBars, FaTimes } from 'react-icons/fa';
+import { UserButton } from "@clerk/nextjs";
 
 export function MainNav({
     className,
     ...props
-} : React.HTMLAttributes<HTMLElement>) {
-
+}: React.HTMLAttributes<HTMLElement>) {
+    const [navbarOpen, setNavbarOpen] = useState(false);
     const pathname = usePathname();
     const params = useParams();
 
-    const routes = [{
-        href: `/${params.storeId}`,
-        label: 'Overview',
-        active: pathname === `/${params.storeId}`
-    }, {
-        href: `/${params.storeId}/billboards`,
-        label: 'Billboards',
-        active: pathname === `/${params.storeId}/billboards`
-    }, {
-        href: `/${params.storeId}/categories`,
-        label: 'Categories',
-        active: pathname === `/${params.storeId}/categories`
-    }, {
-        href: `/${params.storeId}/sizes`,
-        label: 'Sizes',
-        active: pathname === `/${params.storeId}/sizes`
-    }, {
-        href: `/${params.storeId}/colors`,
-        label: 'Colors',
-        active: pathname === `/${params.storeId}/colors`
-    }, {
-        href: `/${params.storeId}/products`,
-        label: 'Products',
-        active: pathname === `/${params.storeId}/products`
-    }, {
-        href: `/${params.storeId}/orders`,
-        label: 'Orders',
-        active: pathname === `/${params.storeId}/orders`
-    }, {
-        href: `/${params.storeId}/settings`,
-        label: 'Settings',
-        active: pathname === `/${params.storeId}/settings`
-    }];
-
+    const routes = [
+        { href: `/${params.storeId}`, label: 'Overview' },
+        { href: `/${params.storeId}/billboards`, label: 'Billboards' },
+        { href: `/${params.storeId}/categories`, label: 'Categories' },
+        { href: `/${params.storeId}/sizes`, label: 'Sizes' },
+        { href: `/${params.storeId}/colors`, label: 'Colors' },
+        { href: `/${params.storeId}/products`, label: 'Products' },
+        { href: `/${params.storeId}/orders`, label: 'Orders' },
+        { href: `/${params.storeId}/settings`, label: 'Settings' },
+    ];
 
     return (
-        <nav className={cn("flex items-center justify-center space-x-4 lg:space-x-6" , className) }>
-            {routes.map((route) => (
-                <Link
-                    key={route.label}
-                    href={route.href}
-                    className={cn(
-                        "text-sm font-medium transition-colors hover:text-primary", route.active ? "text-black dark:text-white" : "text-muted-foreground"
+        <nav className='fixed top-0 left-0 right-0 z-10 bg-[#121212] bg-opacity-100'>
+            <div className='flex flex-wrap items-center justify-between mx-auto px-4 py-2'>
+                <Link href={"/"} className='text-2xl md:text-5xl text-white font-semibold'>
+                    Logo
+                </Link>
+                <div className='mobile-menu block md:hidden'>
+                    {!navbarOpen ? (
+                        <button
+                            onClick={() => setNavbarOpen(true)}
+                            className='flex items-center px-3 py-2 border rounded border-slate-200 text-slate-200 hover:text-white hover:border-white'>
+                            <FaBars className='h-5 w-5' />
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => setNavbarOpen(false)}
+                            className='flex items-center px-3 py-2 border rounded border-slate-200 text-slate-200 hover:text-white hover:border-white'>
+                            <FaTimes className='h-5 w-5' />
+                        </button>
                     )}
-                    >{route.label}
-                    </Link>
-            ))}
+                </div>
+                <div className='menu hidden md:flex md:w-auto'>
+                    <ul className='flex p-4 md:p-0 md:flex-row md:space-x-8 mt-0'>
+                        {routes.map((route, index) => (
+                            <li key={index}>
+                                <Link
+                                    href={route.href}
+                                    className={cn(
+                                        "flex items-center text-sm font-medium transition-colors hover:text-slate-400 text-white"
+                                    )}
+                                >
+                                    <span>{route.label}</span>
+                                </Link>
+                            </li>
+
+                        ))}
+                        <UserButton afterSignOutUrl='/' />
+                    </ul>
+                </div>
+            </div>
+            {navbarOpen && (
+                <div className='fixed inset-0 bg-black bg-opacity-80 z-20'>
+                    <div className='flex flex-col items-center pt-20'>
+                        <ul className='flex flex-col space-y-4'>
+                            {routes.map((route, index) => (
+                                <li key={index}>
+                                    <Link
+                                        href={route.href}
+                                        className={cn(
+                                            "text-white text-lg font-medium transition-colors hover:text-slate-400"
+                                        )}
+                                        onClick={() => setNavbarOpen(false)}
+                                    >
+                                        <span>{route.label}</span>
+                                    </Link>
+                                    <UserButton afterSignOutUrl='/' />
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            )}
         </nav>
-    )
-};
+    );
+}
