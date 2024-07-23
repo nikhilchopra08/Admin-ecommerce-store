@@ -27,7 +27,7 @@ export function MainNav({
     ];
 
     return (
-        <nav className='fixed top-0 left-0 right-0 z-10 bg-[#121212] bg-opacity-100'>
+        <nav className='fixed top-0 left-0 -right-4 z-10 bg-[#121212] bg-opacity-100'>
             <div className='flex flex-wrap items-center justify-between mx-auto px-4 py-2'>
                 <Link href={"/"} className='text-2xl md:text-5xl text-white font-semibold'>
                     Logo
@@ -40,15 +40,11 @@ export function MainNav({
                             <FaBars className='h-5 w-5' />
                         </button>
                     ) : (
-                        <button
-                            onClick={() => setNavbarOpen(false)}
-                            className='flex items-center px-3 py-2 border rounded border-slate-200 text-slate-200 hover:text-white hover:border-white'>
-                            <FaTimes className='h-5 w-5' />
-                        </button>
+                        <div></div>
                     )}
                 </div>
                 <div className='menu hidden md:flex md:w-auto'>
-                    <ul className='flex p-4 md:p-0 md:flex-row md:space-x-8 mt-0'>
+                    <ul className='flex md:p-0 md:flex-row md:space-x-8 mt-0'>
                         {routes.map((route, index) => (
                             <li key={index}>
                                 <Link
@@ -68,6 +64,13 @@ export function MainNav({
             </div>
             {navbarOpen && (
                 <div className='fixed inset-0 bg-black bg-opacity-80 z-20'>
+                    <div className="flex justify-end items-end px-3 py-2">
+                        <button
+                            onClick={() => setNavbarOpen(false)}
+                            className='flex items-center px-3 py-2 border rounded border-slate-200 text-slate-200 hover:text-white hover:border-white'>
+                            <FaTimes className='h-5 w-5' />
+                        </button>
+                        </div>
                     <div className='flex flex-col items-center pt-20'>
                         <ul className='flex flex-col space-y-4'>
                             {routes.map((route, index) => (
@@ -81,9 +84,9 @@ export function MainNav({
                                     >
                                         <span>{route.label}</span>
                                     </Link>
-                                    <UserButton afterSignOutUrl='/' />
                                 </li>
                             ))}
+                                                                <UserButton afterSignOutUrl='/' />
                         </ul>
                     </div>
                 </div>
